@@ -71,8 +71,8 @@ def refresh(sender, app_data,user_data):
     window_list=[]
     win32gui.EnumWindows( winEnumHandler, window_list )    
     for window in window_list:
-        dpg.add_button(label=window,tag=window,callback=on_click,parent='process')
-        dpg.set_item_user_data(window,window)
+        tag=dpg.add_button(label=window,callback=on_click,parent='process')
+        dpg.set_item_user_data(tag,window)
 
 def recording(sender, app_data,user_data):
     start_recording()
@@ -81,13 +81,16 @@ def recording(sender, app_data,user_data):
 def show_process_window():
     with dpg.window(label="WindowList", pos=(0,0),width=400,height=800):       
         dpg.add_button(label='refresh',tag='refresh',callback=refresh)
-        dpg.add_button(label='recording',tag='recording',callback=recording)
+        dpg.add_button(label='Press F12 to recording',tag='text1')
+        dpg.add_button(label='Press F12 again to stop recording',tag='text2')
+        dpg.add_button(label='Disable enhance cursor accuracy in Windows setting',tag='text3')
+        #dpg.add_text(label='recording (F12)',tag='recording')
         window_list=[]
         win32gui.EnumWindows( winEnumHandler, window_list )
-        with dpg.collapsing_header(label='process',tag='process'):
+        with dpg.collapsing_header(label='process',tag='process',default_open=True):
             for window in window_list:
-                dpg.add_button(label=window,tag=window,callback=on_click)
-                dpg.set_item_user_data(window,window)
+                tag=dpg.add_button(label=window,callback=on_click)
+                dpg.set_item_user_data(tag,window)
         
        
         #dpg.add_selectable(label='a')
@@ -103,4 +106,7 @@ def show_process_window():
         print('aaa')
         t=Thread(target=playVideo,daemon=True)
         t.start()
+        #t2=Thread(target=recording,daemon=True)
+        #t2.start()
+        start_recording()
         

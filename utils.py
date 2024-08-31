@@ -2,11 +2,11 @@ from PIL import Image
 WIN_HANDLES = None
 import numpy as np
 import cv2
-
+WNAME=None
 
 def capture_win_alt(window_name,change=True):
     # Adapted from https://stackoverflow.com/questions/19695214/screenshot-of-inactive-window-printwindow-win32gui
-    global WIN_HANDLES
+    global WIN_HANDLES,WNAME
     if change:
         WIN_HANDLES=None
     from ctypes import windll
@@ -16,6 +16,7 @@ def capture_win_alt(window_name,change=True):
 
     if WIN_HANDLES is None:
         assert window_name is not None
+        WNAME=window_name
         #print("Acquiring window handle")
         windll.user32.SetProcessDPIAware()
         hwnd = win32gui.FindWindow(None, window_name)
